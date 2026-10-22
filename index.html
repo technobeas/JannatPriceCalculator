@@ -1,0 +1,2499 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f1e9" />
+    <title>Jannat Collection — Perfume Cost Calculator</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap");
+      :root {
+        --paper: #f5f1e9;
+        --card: #fffdf8;
+        --ink: #24251f;
+        --muted: #77786e;
+        --line: #e4dfd3;
+        --wine: #713d45;
+        --wine-dark: #552c33;
+        --gold: #b58a52;
+        --sage: #66765d;
+        --soft: #eee7db;
+        --shadow: 0 18px 50px rgba(47, 39, 28, 0.07);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "DM Sans", sans-serif;
+        min-height: 100vh;
+      }
+      .shell {
+        max-width: 1180px;
+        margin: auto;
+        padding: 32px 28px 44px;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 22px;
+        gap: 20px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand-mark {
+        width: 39px;
+        height: 39px;
+        background: var(--wine);
+        color: #fff8ec;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        font-family: "Playfair Display", serif;
+        font-size: 23px;
+      }
+      .brand-name {
+        font-family: "Playfair Display", serif;
+        font-size: 20px;
+        letter-spacing: 0.02em;
+      }
+      .brand-sub {
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        color: var(--muted);
+        text-transform: uppercase;
+        margin-top: 3px;
+      }
+      .top-note {
+        font-size: 12px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .hero {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 38px;
+        align-items: center;
+        padding: 48px 0 38px;
+      }
+      .eyebrow {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.19em;
+        text-transform: uppercase;
+        color: var(--wine);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .eyebrow:before {
+        content: "";
+        height: 1px;
+        width: 25px;
+        background: var(--gold);
+      }
+      h1 {
+        font-family: "Playfair Display", serif;
+        font-weight: 500;
+        font-size: clamp(39px, 5vw, 64px);
+        line-height: 1.03;
+        letter-spacing: -0.035em;
+        margin: 16px 0 17px;
+        max-width: 590px;
+      }
+      h1 em {
+        color: var(--wine);
+        font-weight: 500;
+      }
+      .intro {
+        font-size: 15px;
+        line-height: 1.75;
+        color: var(--muted);
+        max-width: 490px;
+        margin: 0;
+      }
+      .bottle-scene {
+        min-height: 220px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        border-radius: 3px;
+        background: #e9e0d2;
+      }
+      .bottle-scene:before,
+      .bottle-scene:after {
+        content: "";
+        position: absolute;
+        border: 1px solid rgba(113, 61, 69, 0.16);
+        border-radius: 50%;
+        width: 230px;
+        height: 230px;
+      }
+      .bottle-scene:after {
+        width: 285px;
+        height: 285px;
+      }
+      .halo {
+        position: absolute;
+        width: 165px;
+        height: 165px;
+        border-radius: 50%;
+        background: #d5c1a4;
+        filter: blur(1px);
+      }
+      .bottle {
+        position: relative;
+        z-index: 1;
+        width: 78px;
+        height: 105px;
+        margin-top: 25px;
+        border: 1px solid rgba(90, 60, 38, 0.45);
+        border-radius: 12px 12px 17px 17px;
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.75),
+          rgba(207, 164, 97, 0.55) 35%,
+          rgba(255, 244, 215, 0.8) 72%,
+          rgba(145, 101, 59, 0.4)
+        );
+        box-shadow: 12px 18px 22px rgba(76, 53, 32, 0.16);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .bottle:before {
+        content: "";
+        position: absolute;
+        top: -22px;
+        width: 31px;
+        height: 24px;
+        background: linear-gradient(90deg, #302a26, #706054, #302a26);
+        border-radius: 4px 4px 2px 2px;
+      }
+      .bottle:after {
+        content: "";
+        position: absolute;
+        top: -29px;
+        width: 20px;
+        height: 8px;
+        background: #302a26;
+        border-radius: 3px 3px 0 0;
+      }
+      .bottle-label {
+        font-family: "Playfair Display", serif;
+        font-size: 9px;
+        letter-spacing: 0.1em;
+        text-align: center;
+        color: #6a4634;
+        border-top: 1px solid rgba(106, 70, 52, 0.4);
+        border-bottom: 1px solid rgba(106, 70, 52, 0.4);
+        padding: 5px 3px;
+      }
+      .scene-caption {
+        position: absolute;
+        bottom: 17px;
+        right: 18px;
+        font-size: 9px;
+        letter-spacing: 0.19em;
+        text-transform: uppercase;
+        color: #796d5c;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 22px;
+        align-items: start;
+      }
+      .panel {
+        background: var(--card);
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+      }
+      .panel-head {
+        padding: 23px 25px 18px;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+      }
+      .panel-title {
+        font-family: "Playfair Display", serif;
+        font-size: 22px;
+        font-weight: 600;
+        margin: 0;
+      }
+      .panel-kicker {
+        font-size: 10px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        margin-top: 5px;
+      }
+      .step {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--wine);
+        border: 1px solid #d9c5c1;
+        padding: 7px 9px;
+      }
+      .panel-body {
+        padding: 25px;
+      }
+      .field {
+        margin-bottom: 22px;
+      }
+      .field:last-child {
+        margin-bottom: 0;
+      }
+      label,
+      .label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #56574f;
+        margin-bottom: 9px;
+      }
+      .hint {
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 400;
+        letter-spacing: 0;
+        text-transform: none;
+        margin-left: 4px;
+      }
+      .input-wrap {
+        position: relative;
+      }
+      .currency {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--muted);
+        font-family: "DM Mono", monospace;
+        font-size: 13px;
+      }
+      input,
+      select {
+        width: 100%;
+        height: 48px;
+        border: 1px solid #dcd6c9;
+        background: #fffefa;
+        padding: 0 14px;
+        color: var(--ink);
+        font:
+          14px "DM Sans",
+          sans-serif;
+        border-radius: 0;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      input:focus,
+      select:focus {
+        border-color: var(--wine);
+        box-shadow: 0 0 0 3px rgba(113, 61, 69, 0.08);
+      }
+      .money-input {
+        padding-left: 34px;
+      }
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .size-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .size-option {
+        position: relative;
+      }
+      .size-option input {
+        position: absolute;
+        opacity: 0;
+        width: 1px;
+        height: 1px;
+      }
+      .size-option span {
+        display: flex;
+        min-height: 66px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid var(--line);
+        background: #fffefa;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .size-option strong {
+        font-family: "Playfair Display", serif;
+        font-size: 20px;
+        font-weight: 600;
+      }
+      .size-option small {
+        font-size: 10px;
+        color: var(--muted);
+        margin-top: 3px;
+      }
+      .size-option input:checked + span {
+        background: var(--wine);
+        border-color: var(--wine);
+        color: #fff9f0;
+      }
+      .size-option input:checked + span small {
+        color: #e9d8d4;
+      }
+      .size-option input:focus-visible + span {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+      }
+      .custom-size {
+        display: none;
+        margin-top: 12px;
+      }
+      .custom-size.show {
+        display: block;
+      }
+      .helper-line {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 9px;
+      }
+      .helper-line strong {
+        color: var(--wine);
+        font-weight: 600;
+      }
+      .charges-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .charges-head label {
+        margin: 0;
+      }
+      .text-btn {
+        border: 0;
+        background: none;
+        color: var(--wine);
+        font:
+          600 12px "DM Sans",
+          sans-serif;
+        cursor: pointer;
+        padding: 5px 0;
+      }
+      .charge-quick-actions {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        flex-wrap: wrap;
+      }
+      .quick-charge-btn {
+        border: 1px solid #d9c5c1;
+        background: #f7eee9;
+        color: var(--wine);
+        padding: 7px 11px;
+        font:
+          600 12px "DM Sans",
+          sans-serif;
+        cursor: pointer;
+      }
+      .quick-charge-btn:hover {
+        background: var(--wine);
+        color: #fff8ed;
+      }
+      .payment-mode-control {
+        display: flex;
+        gap: 8px;
+        margin: 0 0 16px;
+      }
+      .payment-mode-control button {
+        flex: 1;
+        border: 1px solid var(--line);
+        background: #fffefa;
+        color: var(--muted);
+        padding: 11px 12px;
+        font:
+          600 12px "DM Sans",
+          sans-serif;
+        cursor: pointer;
+      }
+      .payment-mode-control button.active {
+        background: var(--wine);
+        border-color: var(--wine);
+        color: #fff8ed;
+      }
+      .charge-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 115px 32px;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      .charge-row input {
+        height: 42px;
+        font-size: 13px;
+      }
+      .charge-row .money-input {
+        padding-left: 29px;
+      }
+      .charge-row .currency {
+        left: 11px;
+        font-size: 12px;
+      }
+      .remove-charge {
+        border: 1px solid var(--line);
+        background: #fffefa;
+        color: var(--muted);
+        font-size: 18px;
+        cursor: pointer;
+      }
+      .remove-charge:hover {
+        background: #f5e9e6;
+        color: var(--wine);
+      }
+
+      .discount-control-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+      .discount-control-head label {
+        margin: 0;
+      }
+      .switch-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11px;
+        color: var(--muted);
+        text-transform: none;
+        letter-spacing: 0;
+      }
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 38px;
+        height: 22px;
+        flex: 0 0 auto;
+      }
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        position: absolute;
+      }
+      .switch-track {
+        position: absolute;
+        inset: 0;
+        background: #d8d2c7;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .switch-track:before {
+        content: "";
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        left: 3px;
+        top: 3px;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 0 1px 3px #0002;
+        transition: 0.2s;
+      }
+      .switch input:checked + .switch-track {
+        background: var(--wine);
+      }
+      .switch input:checked + .switch-track:before {
+        transform: translateX(16px);
+      }
+      .switch input:focus-visible + .switch-track {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+      }
+      .discount-fields.hidden {
+        display: none;
+      }
+      .discount-hidden-note {
+        display: none;
+        margin-top: 10px;
+        padding: 10px 12px;
+        background: #f3eee5;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+      .discount-hidden-note.show {
+        display: block;
+      }
+      .summary-discount-row.hidden {
+        display: none;
+      }
+
+      .discount-toggle {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border: 1px solid var(--line);
+        padding: 3px;
+        gap: 3px;
+        background: #f6f1e8;
+      }
+      .discount-toggle button {
+        border: 0;
+        background: transparent;
+        padding: 10px 8px;
+        font:
+          600 12px "DM Sans",
+          sans-serif;
+        color: var(--muted);
+        cursor: pointer;
+      }
+      .discount-toggle button.active {
+        background: var(--card);
+        color: var(--wine);
+        box-shadow: 0 1px 4px #0000000c;
+      }
+      .summary {
+        background: var(--wine);
+        color: #fff8ed;
+        position: sticky;
+        top: 18px;
+        overflow: hidden;
+      }
+      .summary:before {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        border: 1px solid #ffffff16;
+        border-radius: 50%;
+        right: -105px;
+        top: 115px;
+        pointer-events: none;
+      }
+      .summary:after {
+        content: "";
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        border: 1px solid #ffffff12;
+        border-radius: 50%;
+        right: -76px;
+        top: 145px;
+        pointer-events: none;
+      }
+      .summary .panel-head {
+        border-color: #ffffff20;
+      }
+      .summary .panel-kicker {
+        color: #d7bbb8;
+      }
+      .summary .step {
+        color: #f0d7cf;
+        border-color: #a7757a;
+      }
+      .summary .panel-body {
+        padding: 25px;
+        position: relative;
+        z-index: 1;
+      }
+      .total-label {
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #e2c7c3;
+      }
+      .total-value {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(38px, 4vw, 52px);
+        letter-spacing: -0.04em;
+        line-height: 1.15;
+        margin: 10px 0 7px;
+        overflow-wrap: anywhere;
+      }
+      .total-note {
+        font-size: 12px;
+        color: #e1c9c5;
+      }
+      .summary-rule {
+        height: 1px;
+        background: #ffffff26;
+        margin: 25px 0 18px;
+      }
+      .breakdown {
+        display: grid;
+        gap: 14px;
+      }
+      .break-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        font-size: 13px;
+      }
+      .break-row span {
+        color: #e5cfcb;
+      }
+      .break-row strong {
+        font-family: "DM Mono", monospace;
+        font-size: 12px;
+        font-weight: 500;
+        text-align: right;
+        white-space: nowrap;
+      }
+      .break-row.discount span,
+      .break-row.discount strong {
+        color: #f0d4a7;
+      }
+      .break-row.final {
+        padding-top: 15px;
+        border-top: 1px solid #ffffff26;
+        margin-top: 2px;
+        font-weight: 700;
+      }
+      .break-row.final span {
+        color: #fff8ed;
+      }
+      .summary-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+        margin-top: 26px;
+      }
+      .summary-actions .action:first-child {
+        grid-column: 1 / -1;
+      }
+      .input-actions .action {
+        border-color: var(--wine);
+        color: var(--wine);
+      }
+      .input-actions .action.primary {
+        background: var(--wine);
+        color: #fff8ed;
+        border-color: var(--wine);
+      }
+      .action {
+        min-height: 44px;
+        border: 1px solid #d6b6b4;
+        background: transparent;
+        color: #fff8ed;
+        font:
+          600 12px "DM Sans",
+          sans-serif;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .action.primary {
+        background: #fff8ed;
+        color: var(--wine);
+        border-color: #fff8ed;
+      }
+      .action:hover {
+        transform: translateY(-1px);
+      }
+      .footnote {
+        margin: 20px 0 0;
+        font-size: 11px;
+        line-height: 1.6;
+        color: #e0c8c4;
+      }
+      footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        padding-top: 25px;
+        margin-top: 27px;
+        border-top: 1px solid var(--line);
+        font-size: 11px;
+        color: var(--muted);
+      }
+      footer span:last-child {
+        font-family: "DM Mono", monospace;
+      }
+      .toast {
+        position: fixed;
+        bottom: 22px;
+        left: 50%;
+        transform: translate(-50%, 20px);
+        opacity: 0;
+        pointer-events: none;
+        background: var(--ink);
+        color: #fff;
+        padding: 12px 18px;
+        font-size: 13px;
+        transition: 0.25s;
+        z-index: 10;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+      .cart-panel {
+        margin-top: 22px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+      }
+      .cart-empty {
+        padding: 30px 22px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .cart-empty .empty-icon {
+        font-family: "Playfair Display", serif;
+        font-size: 30px;
+        color: #c2b7a5;
+        margin-bottom: 7px;
+      }
+      .cart-list {
+        padding: 0 22px;
+      }
+      .cart-item {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 18px;
+        padding: 18px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .cart-item:last-child {
+        border-bottom: 0;
+      }
+      .cart-item-title {
+        font-family: "Playfair Display", serif;
+        font-size: 17px;
+        margin-bottom: 5px;
+      }
+      .cart-item-meta {
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      .cart-item-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .cart-item-price {
+        font-family: "DM Mono", monospace;
+        font-size: 14px;
+        white-space: nowrap;
+      }
+      .cart-controls {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .qty-btn,
+      .remove-item {
+        width: 29px;
+        height: 29px;
+        border: 1px solid var(--line);
+        background: #fffefa;
+        color: var(--ink);
+        cursor: pointer;
+        font-size: 15px;
+      }
+      .qty-number {
+        font:
+          12px "DM Mono",
+          monospace;
+        min-width: 18px;
+        text-align: center;
+      }
+      .remove-item {
+        color: var(--wine);
+        font-size: 17px;
+      }
+      .cart-bottom {
+        border-top: 1px solid var(--line);
+        padding: 22px;
+        display: grid;
+        grid-template-columns: 1fr minmax(220px, 0.8fr);
+        gap: 25px;
+        align-items: end;
+      }
+      .cart-bottom .breakdown {
+        gap: 11px;
+      }
+      .cart-bottom .break-row {
+        font-size: 12px;
+      }
+      .cart-bottom .break-row strong {
+        font-size: 12px;
+        color: var(--ink);
+      }
+      .cart-bottom .break-row span {
+        color: var(--muted);
+      }
+      .cart-bottom .break-row.final {
+        border-color: var(--line);
+      }
+      .cart-bottom .break-row.final span {
+        color: var(--ink);
+      }
+      .cart-total-label {
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .cart-total-value {
+        font:
+          32px "Playfair Display",
+          serif;
+        margin: 6px 0 14px;
+        letter-spacing: -0.03em;
+      }
+      .cart-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .cart-actions .action {
+        padding: 0 14px;
+        min-height: 42px;
+        border-color: var(--wine);
+        color: var(--wine);
+      }
+      .cart-actions .action.primary {
+        background: var(--wine);
+        color: #fff8ed;
+      }
+      .cart-actions .action:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        transform: none;
+      }
+      .cart-badge {
+        display: inline-grid;
+        place-items: center;
+        min-width: 23px;
+        height: 23px;
+        padding: 0 6px;
+        background: var(--wine);
+        color: #fff8ed;
+        border-radius: 20px;
+        font:
+          11px "DM Mono",
+          monospace;
+        margin-left: 8px;
+      }
+      .cart-note {
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.5;
+        margin-top: 10px;
+      }
+      @media (max-width: 560px) {
+        .cart-bottom {
+          grid-template-columns: 1fr;
+          gap: 18px;
+          padding: 18px;
+        }
+        .cart-list {
+          padding: 0 16px;
+        }
+        .cart-item {
+          gap: 10px;
+        }
+        .cart-item-title {
+          font-size: 16px;
+        }
+        .cart-item-price {
+          font-size: 12px;
+        }
+      }
+
+      @media (max-width: 850px) {
+        .shell {
+          padding: 22px 17px 30px;
+        }
+        .hero {
+          gap: 22px;
+          padding: 35px 0 28px;
+        }
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        .summary {
+          position: relative;
+          top: auto;
+        }
+        .total-value {
+          font-size: 48px;
+        }
+        .bottle-scene {
+          min-height: 190px;
+        }
+      }
+      @media (max-width: 560px) {
+        header {
+          align-items: flex-start;
+        }
+        .top-note {
+          display: none;
+        }
+        .hero {
+          grid-template-columns: 1fr;
+          gap: 20px;
+          padding-top: 30px;
+        }
+        .hero-copy {
+          max-width: 100%;
+        }
+        h1 {
+          font-size: 45px;
+        }
+        .bottle-scene {
+          min-height: 165px;
+        }
+        .panel-head {
+          padding: 19px 18px 15px;
+        }
+        .panel-body {
+          padding: 19px 18px;
+        }
+        .two-col {
+          grid-template-columns: 1fr;
+          gap: 0;
+        }
+        .size-grid {
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          gap: 5px;
+        }
+        .size-option span {
+          min-height: 61px;
+        }
+        .size-option strong {
+          font-size: 16px;
+        }
+        .charge-row {
+          grid-template-columns: minmax(0, 1fr) 92px 30px;
+          gap: 6px;
+        }
+        .charge-row input {
+          padding-right: 8px;
+        }
+        .summary .panel-body {
+          padding: 22px 19px;
+        }
+        .total-value {
+          font-size: 44px;
+        }
+        footer {
+          flex-direction: column;
+          gap: 7px;
+        }
+      }
+      .history-panel {
+        margin-top: 22px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+      }
+      .history-empty {
+        padding: 26px 22px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .history-list {
+        padding: 0 22px;
+      }
+      .history-order {
+        padding: 18px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .history-order:last-child {
+        border-bottom: 0;
+      }
+      .history-order-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        align-items: flex-start;
+      }
+      .history-order-title {
+        font-family: "Playfair Display", serif;
+        font-size: 17px;
+      }
+      .history-order-date {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+      .history-order-total {
+        font:
+          600 15px "DM Mono",
+          monospace;
+        white-space: nowrap;
+      }
+      .history-order-meta {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.7;
+        margin-top: 10px;
+        white-space: pre-line;
+      }
+      .history-order-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .history-order-actions button {
+        border: 1px solid var(--line);
+        background: #fffefa;
+        color: var(--wine);
+        padding: 7px 10px;
+        font:
+          600 11px "DM Sans",
+          sans-serif;
+        cursor: pointer;
+      }
+      .history-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .history-actions .action {
+        padding: 0 14px;
+        min-height: 42px;
+        border-color: var(--wine);
+        color: var(--wine);
+      }
+      .history-actions .action:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+      .export-tools{padding:18px 22px;border-bottom:1px solid var(--line);background:#fbf8f2;display:grid;gap:14px}
+      .export-tools[hidden]{display:none!important}
+      .export-filter-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:end}
+      .export-presets{display:flex;gap:7px;flex-wrap:wrap}
+      .export-presets button{border:1px solid #d9c5c1;background:#fffefa;color:var(--wine);padding:9px 13px;font:600 12px "DM Sans",sans-serif;cursor:pointer}
+      .export-presets button.active{background:var(--wine);color:#fff8ed}
+      .export-tools label{margin-bottom:6px}
+      .export-tools input[type=date]{height:40px}
+      .export-checks{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+      .export-checks label{display:flex;align-items:center;gap:7px;margin:0;text-transform:none;letter-spacing:0;font-weight:500}
+      .export-checks input{width:auto;height:auto}
+      .export-summary{font-size:12px;color:var(--muted);line-height:1.6}
+      @media(max-width:560px){.export-filter-row{grid-template-columns:1fr}.history-actions{flex-wrap:wrap;justify-content:flex-end}.export-tools{padding:16px}}
+
+      .backup-tools{padding:18px 22px;border-bottom:1px solid var(--line);background:#f7f2e9;display:grid;gap:14px}
+      .backup-tools[hidden]{display:none!important}
+      .backup-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+      .backup-card{border:1px solid var(--line);background:#fffdf8;padding:15px;display:grid;gap:9px;align-content:start}
+      .backup-card h3{margin:0;font:600 17px "Playfair Display",serif;color:var(--wine)}
+      .backup-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.55}
+      .backup-card .action{color:var(--wine);border-color:var(--wine);padding:0 12px}
+      .backup-card .action.primary{background:var(--wine);color:#fff8ed}
+      .backup-card select,.backup-card input[type=file]{width:100%;height:auto;min-height:40px;padding:9px;font-size:12px}
+      .backup-status{font-size:12px;line-height:1.5;color:var(--muted);padding:10px 12px;background:#eee7db}
+      .backup-status.warning{color:#713d45;background:#f5e9e6}
+      @media(max-width:650px){.backup-grid{grid-template-columns:1fr}.backup-tools{padding:16px}}
+
+      @media print {
+        body {
+          background: white;
+        }
+        .shell {
+          max-width: none;
+          padding: 0;
+        }
+        .hero,
+        header,
+        footer,
+        .form-panel,
+        .summary-actions,
+        .footnote,
+        .cart-panel {
+          display: none !important;
+        }
+        .layout {
+          display: block;
+        }
+        .summary {
+          position: static;
+          background: white;
+          color: #222;
+          border: 1px solid #ddd;
+          box-shadow: none;
+        }
+        .summary .panel-head {
+          border-color: #ddd;
+        }
+        .summary .panel-kicker,
+        .summary .total-label,
+        .summary .total-note,
+        .break-row span,
+        .break-row.discount span,
+        .break-row.discount strong,
+        .break-row.final span {
+          color: #555;
+        }
+        .summary .step {
+          color: #555;
+          border-color: #ddd;
+        }
+        .summary .total-value,
+        .break-row strong {
+          color: #222;
+        }
+        .summary-rule,
+        .break-row.final {
+          border-color: #ddd;
+        }
+        .summary:before,
+        .summary:after {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header>
+        <div class="brand">
+          <div class="brand-mark">J</div>
+          <div>
+            <div class="brand-name">Jannat Collection</div>
+            <div class="brand-sub">Perfume Cost &amp; Order Studio</div>
+          </div>
+        </div>
+        <div class="top-note">Jannat Collection · Perfume Shop</div>
+      </header>
+
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">Jannat Collection · Perfume Shop</div>
+          <h1>Your fragrance.<br /><em>Your perfect price.</em></h1>
+          <p class="intro">
+            Calculate perfume sizes, add optional packaging or service charges,
+            and manage your order discount—all in one simple place.
+          </p>
+        </div>
+        <div class="bottle-scene" aria-label="Illustration of a perfume bottle">
+          <div class="halo"></div>
+          <div class="bottle">
+            <div class="bottle-label">JANNAT<br />COLLECTION</div>
+          </div>
+          <div class="scene-caption">Jannat Collection</div>
+        </div>
+      </section>
+
+      <main class="layout">
+        <section class="panel form-panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">Build your price</h2>
+              <div class="panel-kicker">Enter the details below</div>
+            </div>
+            <div class="step">01 / INPUT</div>
+          </div>
+          <div class="panel-body">
+            <div class="field">
+              <label for="productName"
+                >Product name <span class="hint">— optional</span></label
+              >
+              <input
+                id="productName"
+                type="text"
+                maxlength="100"
+                placeholder="e.g. Oud, Musk, Rose perfume"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="field">
+              <label for="perfumePrice"
+                >Product / base price
+                <span class="hint" id="priceInputHint">— price of your 12 ml base</span></label
+              >
+              <div class="input-wrap">
+                <span class="currency">₹</span
+                ><input
+                  class="money-input"
+                  id="perfumePrice"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value="1200"
+                  inputmode="decimal"
+                />
+              </div>
+              <div class="helper-line">
+                <span>Base price reference</span
+                ><strong id="basePriceHint">₹1,200.00 / 12 ml</strong>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Choose fill size</label>
+              <div
+                class="size-grid"
+                role="radiogroup"
+                aria-label="Perfume fill size"
+              >
+                <label class="size-option"
+                  ><input type="radio" name="size" value="piece" /><span
+                    ><strong>1 pc</strong><small>Packaged unit</small></span
+                ></label>
+                <label class="size-option"
+                  ><input type="radio" name="size" value="3" /><span
+                    ><strong>3 ml</strong><small>¼ of base</small></span
+                  ></label
+                >
+                <label class="size-option"
+                  ><input type="radio" name="size" value="6" /><span
+                    ><strong>6 ml</strong><small>½ of base</small></span
+                  ></label
+                >
+                <label class="size-option"
+                  ><input type="radio" name="size" value="12" checked /><span
+                    ><strong>12 ml</strong><small>Full base</small></span
+                  ></label
+                >
+                <label class="size-option"
+                  ><input type="radio" name="size" value="custom" /><span
+                    ><strong>Cust</strong><small>Any ml</small></span
+                  ></label
+                >
+              </div>
+              <div class="custom-size" id="customSizeWrap">
+                <label for="customSize">Custom fill size (ml)</label>
+                <div class="input-wrap">
+                  <input
+                    id="customSize"
+                    type="number"
+                    min="0.1"
+                    step="0.1"
+                    value="25"
+                    inputmode="decimal"
+                  />
+                </div>
+              </div>
+              <div class="helper-line">
+                <span>Perfume cost for selected size</span
+                ><strong id="perfumeCostHint">₹1,200.00</strong>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="charges-head">
+                <label>Additional charges </label>
+                <div class="charge-quick-actions">
+                  <button
+                    class="quick-charge-btn"
+                    type="button"
+                    data-quick-charge="80"
+                  >
+                    + ₹80
+                  </button>
+                  <button
+                    class="quick-charge-btn"
+                    type="button"
+                    data-quick-charge="120"
+                  >
+                    + ₹120
+                  </button>
+                  <button class="text-btn" type="button" id="addCharge">
+                    + Custom
+                  </button>
+                </div>
+              </div>
+              <div id="chargesList"></div>
+              <div class="helper-line">
+                <span>All extra charges combined</span
+                ><strong id="chargesHint">₹0.00</strong>
+              </div>
+            </div>
+
+            <div class="summary-actions input-actions">
+              <button class="action primary" id="addToCartBtn" type="button">
+                + Add to cart
+              </button>
+              <button class="action" id="resetBtn" type="button">
+                Reset inputs
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <section class="cart-panel" id="cartPanel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">
+              Your cart <span class="cart-badge" id="cartCount">0</span>
+            </h2>
+            <div class="panel-kicker">Your perfume order, all in one place</div>
+          </div>
+          <div class="step">02 / CART</div>
+        </div>
+        <div id="cartItems">
+          <div class="cart-empty">
+            <div class="empty-icon">◇</div>
+            Your cart is waiting for its first fragrance.<br />Add a calculated
+            item to start your order.
+          </div>
+        </div>
+        <div class="cart-bottom">
+          <div>
+            <div class="cart-total-label">Grand total</div>
+            <div class="cart-total-value" id="cartGrandTotal">₹0.00</div>
+            <div class="cart-note">
+              Your active cart is saved in this browser. Save an order to keep a
+              permanent order snapshot below.
+            </div>
+          </div>
+          <div class="breakdown">
+            <label>Payment mode</label>
+            <div
+              class="payment-mode-control"
+              role="group"
+              aria-label="Payment mode"
+            >
+              <button
+                type="button"
+                data-payment-mode="offline"
+                class="active"
+                aria-pressed="true"
+              >
+                Offline
+              </button>
+              <button
+                type="button"
+                data-payment-mode="online"
+                aria-pressed="false"
+              >
+                Online
+              </button>
+            </div>
+            <div class="discount-control-head" style="margin-top: 0">
+              <label for="discountEnabled">Order discount</label>
+              <div class="switch-wrap">
+                <span id="discountSwitchLabel">Hidden</span>
+                <label class="switch" aria-label="Show order discount controls">
+                  <input type="checkbox" id="discountEnabled" />
+                  <span class="switch-track"></span>
+                </label>
+              </div>
+            </div>
+            <div class="discount-fields hidden" id="discountFields">
+              <div
+                class="discount-toggle"
+                role="group"
+                aria-label="Discount type"
+              >
+                <button
+                  type="button"
+                  data-mode="percent"
+                  class="active"
+                  aria-pressed="true"
+                >
+                  Percentage (%)
+                </button>
+                <button type="button" data-mode="fixed" aria-pressed="false">
+                  Fixed amount (₹)
+                </button>
+              </div>
+              <div class="input-wrap" style="margin-top: 10px">
+                <span class="currency" id="discountPrefix">%</span
+                ><input
+                  class="money-input"
+                  id="discountValue"
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.01"
+                  value="0"
+                  inputmode="decimal"
+                  aria-label="Order discount value"
+                />
+              </div>
+              <div class="helper-line">
+                <span>Discount amount</span
+                ><strong id="discountHint">− ₹0.00</strong>
+              </div>
+            </div>
+            <div class="discount-hidden-note show" id="discountHiddenNote">
+              Discount is off. The full order total is shown.
+            </div>
+            <div class="break-row">
+              <span>Items subtotal</span
+              ><strong id="cartSubtotal">₹0.00</strong>
+            </div>
+            <div
+              class="break-row discount"
+              id="cartDiscountRow"
+              style="display: none"
+            >
+              <span>Total discounts</span
+              ><strong id="cartDiscount">− ₹0.00</strong>
+            </div>
+            <div class="break-row final">
+              <span>Amount payable</span><strong id="cartPayable">₹0.00</strong>
+            </div>
+            <div class="cart-actions">
+              <button
+                class="action primary"
+                id="saveOrderBtn"
+                type="button"
+                disabled
+              >
+                Save order
+              </button>
+              <button class="action" id="clearCartBtn" type="button" disabled>
+                Clear cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="history-panel" id="orderHistoryPanel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">
+              Past orders <span class="cart-badge" id="historyCount">0</span>
+            </h2>
+            <div class="panel-kicker">Saved in this browser on this device</div>
+          </div>
+          <div class="history-actions">
+            <button class="action primary" id="exportHistoryPdfBtn" type="button" disabled>
+              Export PDF
+            </button>
+            <button class="action" id="toggleBackupToolsBtn" type="button">
+              Backup &amp; restore
+            </button>
+            <button class="action" id="clearHistoryBtn" type="button" disabled>
+              Clear history
+            </button>
+          </div>
+        </div>
+        <div class="backup-tools" id="backupTools" hidden>
+          <div>
+            <div class="panel-title" style="font-size:18px">Backup &amp; restore</div>
+            <div class="panel-kicker">Save a copy outside this browser, then restore it whenever needed.</div>
+          </div>
+          <div class="backup-grid">
+            <div class="backup-card">
+              <h3>Full backup · JSON</h3>
+              <p>Includes all saved orders, the current cart, payment mode, and a product list derived from saved order/cart items. Keep this file somewhere safe, such as a USB drive or cloud folder.</p>
+              <button class="action primary" id="downloadJsonBackupBtn" type="button">Download full backup (.json)</button>
+            </div>
+            <div class="backup-card">
+              <h3>Restore from backup</h3>
+              <p>Select a Jannat Collection JSON backup. You can merge orders with existing records or replace the saved order history. Check the backup date and keep a copy of current data first.</p>
+              <label for="restoreMode">Order restore mode</label>
+              <select id="restoreMode">
+                <option value="merge">Merge with existing orders (recommended)</option>
+                <option value="replace">Replace all existing orders</option>
+              </select>
+              <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-weight:500"><input id="restoreCartToo" type="checkbox" checked style="width:auto;height:auto" /> Restore the backed-up cart and payment mode</label>
+              <input id="restoreBackupFile" type="file" accept=".json,application/json" />
+              <button class="action primary" id="restoreJsonBackupBtn" type="button">Restore selected backup</button>
+            </div>
+            <div class="backup-card">
+              <h3>Orders · CSV</h3>
+              <p>Export a spreadsheet-friendly file containing order totals, discounts, payment mode, item details, and charge breakdowns. Useful for Excel or Google Sheets.</p>
+              <button class="action" id="downloadOrdersCsvBtn" type="button">Export orders CSV</button>
+            </div>
+            <div class="backup-card">
+              <h3>Product list · CSV</h3>
+              <p>Export distinct products found in saved orders and the current cart, including unit type, size, recorded base price, and additional charge details. This calculator does not yet maintain a separate product catalogue.</p>
+              <button class="action" id="downloadProductsCsvBtn" type="button">Export product list CSV</button>
+            </div>
+          </div>
+          <div class="backup-status" id="backupStatus" role="status" aria-live="polite">Backup files are downloaded to your device. They are not automatically uploaded to cloud storage.</div>
+        </div>
+        <div class="export-tools" id="exportTools" hidden>
+          <div><div class="panel-title" style="font-size:18px">Professional report export</div><div class="panel-kicker">Choose a period and report details before generating your branded PDF.</div></div>
+          <div class="export-presets" role="group" aria-label="Report date range">
+            <button type="button" data-export-range="day">Today</button>
+            <button type="button" data-export-range="week" class="active">This week</button>
+            <button type="button" data-export-range="month">This month</button>
+            <button type="button" data-export-range="all">All orders</button>
+            <button type="button" data-export-range="custom">Custom range</button>
+          </div>
+          <div class="export-filter-row" id="customExportDates" hidden>
+            <div><label for="exportStartDate">From date</label><input type="date" id="exportStartDate" /></div>
+            <div><label for="exportEndDate">To date</label><input type="date" id="exportEndDate" /></div>
+          </div>
+          <div class="export-checks">
+            <label><input type="checkbox" id="exportIncludeItems" checked /> Item and quantity details</label>
+            <label><input type="checkbox" id="exportIncludeCharges" checked /> Additional charge breakdown</label>
+            <label><input type="checkbox" id="exportIncludeOrderSummary" checked /> Discount and payment summary</label>
+          </div>
+          <div class="export-summary" id="exportPreviewSummary">Select a date range to preview the report.</div>
+          <div class="history-actions"><button class="action primary" id="generateHistoryPdfBtn" type="button">Generate branded PDF</button><button class="action" id="cancelHistoryPdfBtn" type="button">Cancel</button></div>
+        </div>
+        <div id="orderHistoryList">
+          <div class="history-empty">
+            No saved orders yet. Save a cart to keep its items, discount, and
+            grand total here.
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <span>JANNAT COLLECTION &nbsp;·&nbsp; Perfume Shop</span
+        ><span>YOUR FRAGRANCE, BEAUTIFULLY PRICED</span>
+      </footer>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script>
+      (() => {
+        const $ = (id) => document.getElementById(id);
+        const priceInput = $("perfumePrice"),
+          customSize = $("customSize"),
+          customWrap = $("customSizeWrap");
+        const chargesList = $("chargesList"),
+          discountInput = $("discountValue"),
+          discountPrefix = $("discountPrefix");
+        const toast = $("toast");
+        let discountMode = "percent",
+          discountEnabled = false,
+          toastTimer;
+        const CART_STORAGE_KEY = "jannatCollection.cart.v1";
+        const ORDERS_STORAGE_KEY = "jannatCollection.orders.v1";
+        const PAYMENT_MODE_KEY = "jannatCollection.paymentMode.v1";
+        let paymentMode = safePaymentMode();
+        function safePaymentMode() {
+          try {
+            return localStorage.getItem("jannatCollection.paymentMode.v1") ===
+              "online"
+              ? "online"
+              : "offline";
+          } catch (error) {
+            return "offline";
+          }
+        }
+        const safeRead = (key, fallback) => {
+          try {
+            const parsed = JSON.parse(localStorage.getItem(key) || "null");
+            return parsed == null ? fallback : parsed;
+          } catch (error) {
+            console.warn("Could not read saved Jannat Collection data.", error);
+            return fallback;
+          }
+        };
+        const safeWrite = (key, value) => {
+          try {
+            localStorage.setItem(key, JSON.stringify(value));
+            return true;
+          } catch (error) {
+            console.warn("Could not save Jannat Collection data.", error);
+            notify(
+              "Browser storage is full or unavailable. Please export or clear saved data.",
+            );
+            return false;
+          }
+        };
+        const savedCart = safeRead(CART_STORAGE_KEY, []);
+        const cart = Array.isArray(savedCart)
+          ? savedCart.filter(
+              (item) =>
+                item &&
+                Number.isFinite(Number(item.id)) &&
+                Number.isFinite(Number(item.subtotal)) &&
+                Number.isFinite(Number(item.quantity)) &&
+                Number(item.quantity) > 0,
+            )
+          : [];
+        let orders = safeRead(ORDERS_STORAGE_KEY, []);
+        if (!Array.isArray(orders)) orders = [];
+        let nextCartId =
+          Math.max(0, ...cart.map((item) => Number(item.id) || 0)) + 1;
+        const money = (value) =>
+          new Intl.NumberFormat("en-IN", {
+            style: "currency",
+            currency: "INR",
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(Number.isFinite(value) ? value : 0);
+        const num = (el) => Math.max(0, Number(el.value) || 0);
+        const selectedSize = () =>
+          document.querySelector('input[name="size"]:checked')?.value || "12";
+        function getSize() {
+          const selected = selectedSize();
+          if (selected === "piece") return "piece";
+          return selected === "custom"
+            ? Math.max(0, Number(customSize.value) || 0)
+            : Number(selected);
+        }
+        function sizeLabel(item) {
+          return item && (item.unitType === "piece" || item.size === "piece")
+            ? "1 pc"
+            : `${Number(item?.size) || 0} ml`;
+        }
+        function getCharges() {
+          return [...chargesList.querySelectorAll(".charge-row")].reduce(
+            (sum, row) =>
+              sum +
+              Math.max(
+                0,
+                Number(row.querySelector(".charge-amount").value) || 0,
+              ),
+            0,
+          );
+        }
+        function calculateItem() {
+          const basePrice = num(priceInput),
+            size = getSize(),
+            unitType = size === "piece" ? "piece" : "ml",
+            perfumeCost = unitType === "piece" ? basePrice : (basePrice * size) / 12,
+            chargeBreakdown = [...chargesList.querySelectorAll(".charge-row")].map((row) => ({
+              name: row.querySelector('input[aria-label="Charge name"]').value.trim() || "Additional charge",
+              amount: Math.max(0, Number(row.querySelector(".charge-amount").value) || 0),
+            })).filter((charge) => charge.amount > 0),
+            charges = chargeBreakdown.reduce((sum, charge) => sum + charge.amount, 0),
+            name = $("productName").value.trim();
+          return {
+            name, basePrice, size, unitType, perfumeCost, charges, chargeBreakdown,
+            subtotal: perfumeCost + charges,
+          };
+        }
+        function persistCart() {
+          safeWrite(CART_STORAGE_KEY, cart);
+        }
+        function renderOrderHistory() {
+          const container = $("orderHistoryList");
+          $("historyCount").textContent = orders.length;
+          $("clearHistoryBtn").disabled = orders.length === 0;
+          $("exportHistoryPdfBtn").disabled = orders.length === 0;
+          container.replaceChildren();
+          if (!orders.length) {
+            const empty = document.createElement("div");
+            empty.className = "history-empty";
+            empty.textContent =
+              "No saved orders yet. Save a cart to keep its items, discount, and grand total here.";
+            container.append(empty);
+            return;
+          }
+          orders
+            .slice()
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            .forEach((order) => {
+              const row = document.createElement("article");
+              row.className = "history-list";
+              const item = document.createElement("div");
+              item.className = "history-order";
+              const head = document.createElement("div");
+              head.className = "history-order-head";
+              const left = document.createElement("div");
+              const title = document.createElement("div");
+              title.className = "history-order-title";
+              title.textContent = order.orderNumber || "Saved order";
+              const date = document.createElement("div");
+              date.className = "history-order-date";
+              date.textContent = new Date(order.createdAt).toLocaleString(
+                "en-IN",
+              );
+              left.append(title, date);
+              const total = document.createElement("div");
+              total.className = "history-order-total";
+              total.textContent = money(Number(order.payable) || 0);
+              head.append(left, total);
+              const meta = document.createElement("div");
+              meta.className = "history-order-meta";
+              const itemLines = (Array.isArray(order.items) ? order.items : []).map((line) => {
+                const qty = Number(line.quantity) || 0;
+                const title = `${line.name || (line.unitType === "piece" ? "Packaged product" : "Perfume")} · ${sizeLabel(line)} × ${qty} — ${money((Number(line.subtotal) || 0) * qty)}`;
+                const details = Array.isArray(line.chargeBreakdown) && line.chargeBreakdown.length
+                  ? line.chargeBreakdown.filter(charge => Number(charge.amount) > 0).map(charge => `    ${charge.name || "Additional charge"}: ${money(Number(charge.amount) || 0)} each × ${qty} = ${money((Number(charge.amount) || 0) * qty)}`)
+                  : Number(line.charges) > 0 ? [`    Additional charges: ${money(Number(line.charges) * qty)}${line.chargeBreakdown ? "" : " (older order; charge name not recorded)"}`] : [];
+                return [title, ...details].join("\n");
+              });
+              const discountLine =
+                Number(order.discount) > 0
+                  ? `Discount (${order.discountMode === "percent" ? `${order.discountValue}%` : money(order.discountValue)}): − ${money(order.discount)}`
+                  : "Discount: None";
+              const paymentLine = `Payment mode: ${(order.paymentMode || "offline").toUpperCase()}`;
+              meta.textContent = `${itemLines.join("\n")}\nSubtotal: ${money(Number(order.subtotal) || 0)}\n${discountLine}\n${paymentLine}\nGrand total: ${money(Number(order.payable) || 0)}`;
+              const actions = document.createElement("div");
+              actions.className = "history-order-actions";
+              const restore = document.createElement("button");
+              restore.type = "button";
+              restore.textContent = "Load into cart";
+              restore.addEventListener("click", () => {
+                cart.splice(
+                  0,
+                  cart.length,
+                  ...(Array.isArray(order.items)
+                    ? order.items.map((line) => ({ ...line, id: nextCartId++ }))
+                    : []),
+                );
+                discountEnabled = Boolean(order.discountEnabled);
+                discountMode =
+                  order.discountMode === "fixed" ? "fixed" : "percent";
+                $("discountEnabled").checked = discountEnabled;
+                $("discountFields").classList.toggle(
+                  "hidden",
+                  !discountEnabled,
+                );
+                $("discountHiddenNote").classList.toggle(
+                  "show",
+                  !discountEnabled,
+                );
+                $("discountSwitchLabel").textContent = discountEnabled
+                  ? "Shown"
+                  : "Hidden";
+                discountInput.value = Number(order.discountValue) || 0;
+                paymentMode =
+                  order.paymentMode === "online" ? "online" : "offline";
+                try {
+                  localStorage.setItem(PAYMENT_MODE_KEY, paymentMode);
+                } catch (error) {}
+                updatePaymentModeUI();
+                discountPrefix.textContent =
+                  discountMode === "percent" ? "%" : "₹";
+                discountInput.max = discountMode === "percent" ? "100" : "";
+                document.querySelectorAll("[data-mode]").forEach((btn) => {
+                  const active = btn.dataset.mode === discountMode;
+                  btn.classList.toggle("active", active);
+                  btn.setAttribute("aria-pressed", String(active));
+                });
+                persistCart();
+                renderCart();
+                notify("Past order loaded into cart");
+                $("cartPanel").scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              });
+              const remove = document.createElement("button");
+              remove.type = "button";
+              remove.textContent = "Delete";
+              remove.addEventListener("click", () => {
+                orders = orders.filter((saved) => saved.id !== order.id);
+                safeWrite(ORDERS_STORAGE_KEY, orders);
+                renderOrderHistory();
+                notify("Saved order deleted");
+              });
+              actions.append(restore, remove);
+              item.append(head, meta, actions);
+              row.append(item);
+              container.append(row);
+            });
+        }
+        function updatePaymentModeUI() {
+          document.querySelectorAll("[data-payment-mode]").forEach((button) => {
+            const active = button.dataset.paymentMode === paymentMode;
+            button.classList.toggle("active", active);
+            button.setAttribute("aria-pressed", String(active));
+          });
+        }
+        document.querySelectorAll("[data-payment-mode]").forEach((button) => {
+          button.addEventListener("click", () => {
+            paymentMode =
+              button.dataset.paymentMode === "online" ? "online" : "offline";
+            try {
+              localStorage.setItem(PAYMENT_MODE_KEY, paymentMode);
+            } catch (error) {}
+            updatePaymentModeUI();
+            notify(`Payment mode set to ${paymentMode}`);
+          });
+        });
+
+        function escapeHtml(value) {
+          return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+            "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+          })[char]);
+        }
+        let exportRange = "week";
+        function dateInputValue(date) {
+          const d = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+          return d.toISOString().slice(0, 10);
+        }
+        function getExportRange() {
+          const now = new Date();
+          let start = null, end = new Date(now);
+          end.setHours(23, 59, 59, 999);
+          if (exportRange === "day") { start = new Date(now); start.setHours(0,0,0,0); }
+          else if (exportRange === "week") {
+            start = new Date(now); start.setHours(0,0,0,0);
+            const day = (start.getDay() + 6) % 7; start.setDate(start.getDate() - day);
+          } else if (exportRange === "month") { start = new Date(now.getFullYear(), now.getMonth(), 1); start.setHours(0,0,0,0); }
+          else if (exportRange === "custom") {
+            const from = $("exportStartDate").value, to = $("exportEndDate").value;
+            if (!from || !to || from > to) return { error: "Choose a valid custom start and end date." };
+            start = new Date(`${from}T00:00:00`); end = new Date(`${to}T23:59:59.999`);
+          }
+          const selected = orders.filter(order => {
+            const d = new Date(order.createdAt);
+            return Number.isFinite(d.getTime()) && (!start || d >= start) && d <= end;
+          }).sort((a,b) => new Date(a.createdAt)-new Date(b.createdAt));
+          return { start, end, selected };
+        }
+        function updateExportPreview() {
+          const result = getExportRange();
+          const summary = $("exportPreviewSummary");
+          if (result.error) { summary.textContent = result.error; $("generateHistoryPdfBtn").disabled = true; return; }
+          const subtotal = result.selected.reduce((sum,o) => sum + (Number(o.subtotal)||0),0);
+          const discounts = result.selected.reduce((sum,o) => sum + (Number(o.discount)||0),0);
+          const total = result.selected.reduce((sum,o) => sum + (Number(o.payable)||0),0);
+          summary.textContent = `${result.selected.length} order(s) · Subtotal ${money(subtotal)} · Discounts ${money(discounts)} · Net sales ${money(total)}${result.selected.length ? ` · ${new Date(result.selected[0].createdAt).toLocaleDateString("en-IN")} to ${new Date(result.selected[result.selected.length-1].createdAt).toLocaleDateString("en-IN")}` : ""}`;
+          $("generateHistoryPdfBtn").disabled = result.selected.length === 0;
+        }
+        function openExportTools() {
+          $("exportTools").hidden = false;
+          const now = new Date();
+          const first = new Date(now.getFullYear(), now.getMonth(), 1);
+          $("exportStartDate").value = dateInputValue(first);
+          $("exportEndDate").value = dateInputValue(now);
+          setExportRange("week");
+          $("exportTools").scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+        function setExportRange(range) {
+          exportRange = range;
+          document.querySelectorAll("[data-export-range]").forEach(button => {
+            const active = button.dataset.exportRange === range;
+            button.classList.toggle("active", active);
+            button.setAttribute("aria-pressed", String(active));
+          });
+          $("customExportDates").hidden = range !== "custom";
+          updateExportPreview();
+        }
+        function exportOrderHistoryPdf() {
+          const range = getExportRange();
+          if (range.error) { notify(range.error); return; }
+          const sortedOrders = range.selected;
+          if (!sortedOrders.length) { notify("No orders found in this date range"); return; }
+          const includeItems = $("exportIncludeItems").checked;
+          const includeCharges = $("exportIncludeCharges").checked;
+          const includeSummary = $("exportIncludeOrderSummary").checked;
+          const escape = escapeHtml;
+          const fmtDate = d => new Date(d).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
+          const rangeLabel = exportRange === "all" ? "All saved orders" : exportRange === "custom" ? `${$("exportStartDate").value} to ${$("exportEndDate").value}` : exportRange === "day" ? "Today" : exportRange === "week" ? "This week" : "This month";
+          let gross = 0, discountTotal = 0, net = 0, units = 0, chargeTotal = 0, onlineTotal = 0, offlineTotal = 0;
+          const orderSections = sortedOrders.map((order, index) => {
+            const items = Array.isArray(order.items) ? order.items : [];
+            const subtotal = Number(order.subtotal)||0, discount = Number(order.discount)||0, payable = Number(order.payable)||0;
+            gross += subtotal; discountTotal += discount; net += payable;
+            if ((order.paymentMode || "offline").toLowerCase() === "online") onlineTotal += payable;
+            else offlineTotal += payable;
+            units += items.reduce((sum,item)=>sum+(Number(item.quantity)||0),0);
+            chargeTotal += items.reduce((sum,item)=>sum+(Number(item.charges)||0)*(Number(item.quantity)||0),0);
+            const itemRows = includeItems ? items.map(item => {
+              const qty = Number(item.quantity)||0, unitPrice = Number(item.subtotal)||0;
+              const charges = Number(item.charges)||0;
+              let chargeDetails = "";
+              if (includeCharges && Array.isArray(item.chargeBreakdown) && item.chargeBreakdown.length) {
+                chargeDetails = `<div class="charge-detail">${item.chargeBreakdown.map(c => `${escape(c.name || "Additional charge")}: ${money(Number(c.amount)||0)} × ${qty} = ${money((Number(c.amount)||0)*qty)}`).join("<br>")}</div>`;
+              } else if (includeCharges && charges > 0) {
+                chargeDetails = `<div class="charge-detail">Additional charges: ${money(charges)} each × ${qty} = ${money(charges*qty)}<br><em>Charge names were not recorded in this older order.</em></div>`;
+              }
+              return `<tr><td><strong>${escape(item.name || (item.unitType === "piece" ? "Packaged product" : "Perfume"))}</strong><small>${escape(sizeLabel(item))} · Base ${money(Number(item.basePrice)||0)}${item.unitType === "piece" || item.size === "piece" ? " / unit" : " / 12 ml base"}</small>${chargeDetails}</td><td class="center">${qty}</td><td class="num">${money(Number(item.perfumeCost)||0)}</td><td class="num">${money(charges)}</td><td class="num">${money(unitPrice)}</td><td class="num">${money(unitPrice*qty)}</td></tr>`;
+            }).join("") : "";
+            const discountText = discount > 0 ? `Discount (${order.discountMode === "percent" ? `${Number(order.discountValue)||0}%` : money(Number(order.discountValue)||0)})` : "Discount";
+            return `<section class="order"><div class="order-head"><div><div class="order-no">${escape(order.orderNumber || `Order ${index+1}`)}</div><div class="date">${escape(fmtDate(order.createdAt))}</div></div><div class="order-head-right"><span class="payment">${escape((order.paymentMode||"offline").toUpperCase())} PAYMENT</span><div class="order-total">${money(payable)}</div></div></div>${includeItems ? `<table><thead><tr><th>Product / details</th><th class="center">Qty</th><th class="num">Product</th><th class="num">Charges / unit</th><th class="num">Unit total</th><th class="num">Line total</th></tr></thead><tbody>${itemRows || '<tr><td colspan="6">No item details recorded</td></tr>'}</tbody></table>` : ""}${includeSummary ? `<div class="totals"><div><span>Items + charges subtotal</span><strong>${money(subtotal)}</strong></div><div><span>${escape(discountText)}</span><strong>${discount > 0 ? "− " : ""}${money(discount)}</strong></div><div><span>Payment method</span><strong>${escape((order.paymentMode||"offline").toUpperCase())}</strong></div><div class="grand"><span>Amount paid / payable</span><strong>${money(payable)}</strong></div></div>` : ""}</section>`;
+          }).join("");
+          const startDate = range.start ? range.start.toLocaleDateString("en-IN") : "Earliest saved order";
+          const endDate = range.end ? range.end.toLocaleDateString("en-IN") : "Latest saved order";
+          const win = window.open("", "_blank");
+          if (!win) { notify("Allow pop-ups to export the PDF"); return; }
+          win.document.open();
+          win.document.write(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Jannat Collection — Sales Report</title><style>
+            @page{size:A4;margin:14mm 12mm 17mm}*{box-sizing:border-box}body{margin:0;color:#29251f;font:10px Arial,Helvetica,sans-serif;background:#fff;line-height:1.45}.masthead{display:flex;align-items:center;gap:12px;padding:0 0 13px;border-bottom:3px solid #713d45}.mark{width:42px;height:42px;flex:none;border-radius:50%;background:#713d45;color:#fff8ed;display:grid;place-items:center;font:29px Georgia,serif}h1{font:bold 24px Georgia,serif;color:#713d45;margin:0 0 2px}.sub{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#777}.report-title{font:22px Georgia,serif;margin:18px 0 3px;color:#28251f}.report-meta{font-size:9px;color:#777;margin-bottom:13px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:12px 0 18px}.kpi{border:1px solid #e4dfd3;background:#fbf8f2;padding:10px}.kpi span{display:block;font-size:8px;text-transform:uppercase;letter-spacing:.7px;color:#777}.kpi strong{display:block;font: bold 15px Georgia,serif;color:#713d45;margin-top:5px}.section-label{font:bold 10px Arial,sans-serif;color:#713d45;margin:16px 0 7px}.order{border:1px solid #e4dfd3;margin:0 0 13px;break-inside:avoid}.order-head{background:#f7f1e9;padding:10px 11px;display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #e4dfd3}.order-no{font:bold 13px Georgia,serif;color:#713d45}.date{font-size:9px;color:#777;margin-top:3px}.order-head-right{text-align:right}.payment{display:inline-block;border:1px solid #d9c5c1;color:#713d45;padding:4px 6px;font-size:8px;letter-spacing:.6px;font-weight:bold}.order-total{font:bold 14px Georgia,serif;color:#713d45;margin-top:5px}table{width:100%;border-collapse:collapse;table-layout:auto}th{background:#fffdf8;color:#777;text-transform:uppercase;letter-spacing:.35px;font-size:7px;text-align:left}th,td{padding:7px 6px;border-bottom:1px solid #eee8de;vertical-align:top}td{font-size:8.5px}td small{display:block;color:#777;margin-top:3px;font-size:7.5px}.center{text-align:center}.num{text-align:right;white-space:nowrap}.charge-detail{font-size:7.5px;color:#66765d;margin-top:5px;line-height:1.5}.charge-detail em{color:#888}.totals{width:245px;margin:9px 10px 11px auto}.totals div{display:flex;justify-content:space-between;gap:10px;padding:4px 0;color:#666}.totals strong{color:#29251f;white-space:nowrap}.totals .grand{border-top:1px solid #d9c5c1;margin-top:4px;padding-top:7px;font-size:11px;color:#713d45;font-weight:bold}.totals .grand strong{color:#713d45}.closing{margin-top:20px;padding:12px;background:#f7f1e9;border-left:3px solid #b58a52;display:flex;justify-content:space-between;gap:12px}.closing strong{color:#713d45}.closing-metrics{min-width:230px;display:grid;gap:6px}.closing-metrics div{display:flex;justify-content:space-between;gap:18px;text-align:right}.closing-metrics span{font-size:8px;color:#777}.closing-metrics strong{white-space:nowrap}.footer{border-top:1px solid #e4dfd3;margin-top:18px;padding-top:8px;display:flex;justify-content:space-between;color:#777;font-size:8px;letter-spacing:.4px}.page-break{break-before:page}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.order{break-inside:avoid}thead{display:table-header-group}}@media screen{body{max-width:900px;margin:25px auto;padding:20px}}
+            </style></head><body><header class="masthead"><div class="mark">J</div><div><h1>Jannat Collection</h1><div class="sub">Perfume · Beauty · Everyday Elegance</div></div></header><h2 class="report-title">Sales & Past Orders Report</h2><div class="report-meta">Period: ${escape(rangeLabel)} · ${escape(startDate)} – ${escape(endDate)}<br>Generated ${escape(fmtDate(new Date()))} · ${sortedOrders.length} order(s)</div><div class="kpis"><div class="kpi"><span>Orders</span><strong>${sortedOrders.length}</strong></div><div class="kpi"><span>Units sold</span><strong>${units}</strong></div><div class="kpi"><span>Discounts</span><strong>${money(discountTotal)}</strong></div><div class="kpi"><span>Net sales</span><strong>${money(net)}</strong></div></div><div class="section-label">ORDER DETAILS · ${sortedOrders.length} TRANSACTIONS</div>${orderSections}<div class="closing"><div><strong>Jannat Collection</strong><br>Thank you for keeping your sales records organized.</div><div class="closing-metrics"><div><span>Gross subtotal</span><strong>${money(gross)}</strong></div><div><span>Total additional charges recorded</span><strong>${money(chargeTotal)}</strong></div><div><span>Online payment total</span><strong>${money(onlineTotal)}</strong></div><div><span>Offline payment total</span><strong>${money(offlineTotal)}</strong></div></div></div><footer class="footer"><span>JANNAT COLLECTION · CONFIDENTIAL BUSINESS REPORT</span><span>Generated ${escape(dateInputValue(new Date()))}</span></footer><script>window.addEventListener("load",()=>setTimeout(()=>window.print(),450));<\/script></body></html>`);
+          win.document.close();
+        }
+
+
+        const BACKUP_FORMAT = "jannat-collection-backup";
+        const BACKUP_VERSION = 1;
+
+        function getAllItemsForProductExport() {
+          const allItems = [];
+          orders.forEach((order) => {
+            (Array.isArray(order.items) ? order.items : []).forEach((item) => {
+              allItems.push({ ...item, source: order.orderNumber || "Saved order" });
+            });
+          });
+          cart.forEach((item) => allItems.push({ ...item, source: "Current cart" }));
+          return allItems;
+        }
+
+        function buildProductRows() {
+          const unique = new Map();
+          getAllItemsForProductExport().forEach((item) => {
+            const name = String(item.name || "Perfume").trim() || "Perfume";
+            const unitType = item.unitType === "piece" || item.size === "piece" ? "piece" : "ml";
+            const size = unitType === "piece" ? "1 pc" : `${Number(item.size) || 0} ml`;
+            const basePrice = Number(item.basePrice) || 0;
+            const key = [name.toLowerCase(), unitType, size, basePrice.toFixed(2)].join("|");
+            const existing = unique.get(key) || {
+              name, unitType, size, basePrice, timesInOrders: 0,
+              recordedQuantity: 0, chargeNames: new Set(), sources: new Set()
+            };
+            existing.timesInOrders += 1;
+            existing.recordedQuantity += Math.max(0, Number(item.quantity) || 1);
+            (Array.isArray(item.chargeBreakdown) ? item.chargeBreakdown : []).forEach((charge) => {
+              if (Number(charge.amount) > 0) existing.chargeNames.add(String(charge.name || "Additional charge"));
+            });
+            existing.sources.add(item.source || "Saved item");
+            unique.set(key, existing);
+          });
+          return [...unique.values()].map((item) => ({
+            name: item.name,
+            unitType: item.unitType,
+            size: item.size,
+            recordedBasePrice: item.basePrice,
+            lineOccurrences: item.timesInOrders,
+            recordedQuantity: item.recordedQuantity,
+            additionalChargeNames: [...item.chargeNames].join("; "),
+            foundIn: [...item.sources].join("; ")
+          }));
+        }
+
+        function downloadFile(filename, contents, mimeType) {
+          const blob = new Blob([contents], { type: `${mimeType};charset=utf-8` });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = filename;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 1500);
+        }
+
+        function fileDateStamp() {
+          const d = new Date();
+          return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+        }
+
+        function setBackupStatus(message, warning = false) {
+          const status = $("backupStatus");
+          status.textContent = message;
+          status.classList.toggle("warning", warning);
+        }
+
+        function buildFullBackup() {
+          const products = buildProductRows();
+          return {
+            format: BACKUP_FORMAT,
+            version: BACKUP_VERSION,
+            app: "Jannat Collection Perfume Cost Calculator",
+            exportedAt: new Date().toISOString(),
+            recordCounts: { orders: orders.length, cartItems: cart.length, derivedProducts: products.length },
+            paymentMode,
+            orders: orders.map((order) => JSON.parse(JSON.stringify(order))),
+            cart: cart.map((item) => JSON.parse(JSON.stringify(item))),
+            products
+          };
+        }
+
+        function downloadFullBackup() {
+          const backup = buildFullBackup();
+          downloadFile(
+            `jannat-collection-backup-${fileDateStamp()}.json`,
+            JSON.stringify(backup, null, 2),
+            "application/json"
+          );
+          setBackupStatus(`Full backup downloaded: ${backup.orders.length} order(s), ${backup.cart.length} cart item(s), and ${backup.products.length} derived product record(s). Store the file outside this browser.`);
+          notify("Full JSON backup downloaded");
+        }
+
+        function csvCell(value) {
+          let textValue = value == null ? "" : String(value);
+          if (/^[=+\-@]/.test(textValue)) textValue = "'" + textValue;
+          return `"${textValue.replace(/"/g, '""')}"`;
+        }
+
+        function downloadOrdersCsv() {
+          const headers = [
+            "Order Number", "Order ID", "Created At", "Payment Mode", "Item Count",
+            "Items", "Item Details", "Gross Subtotal", "Discount Enabled",
+            "Discount Mode", "Discount Value", "Discount Amount", "Additional Charges",
+            "Payable Total"
+          ];
+          const rows = orders.map((order) => {
+            const items = Array.isArray(order.items) ? order.items : [];
+            const itemDetails = items.map((item) => {
+              const unit = sizeLabel(item);
+              const chargeText = Array.isArray(item.chargeBreakdown)
+                ? item.chargeBreakdown.map((charge) => `${charge.name || "Additional charge"}: ${money(Number(charge.amount) || 0)}`).join(" | ")
+                : (Number(item.charges) > 0 ? `Additional charges: ${money(Number(item.charges) || 0)}` : "");
+              return `${item.name || "Perfume"} (${unit}) x ${Number(item.quantity) || 1}; ${chargeText}`;
+            }).join(" | ");
+            const charges = items.reduce((sum, item) => {
+              const quantity = Number(item.quantity) || 1;
+              const chargeAmount = Array.isArray(item.chargeBreakdown)
+                ? item.chargeBreakdown.reduce((s, charge) => s + (Number(charge.amount) || 0), 0)
+                : (Number(item.charges) || 0);
+              return sum + chargeAmount * quantity;
+            }, 0);
+            return [
+              order.orderNumber || "", order.id || "", order.createdAt || "",
+              String(order.paymentMode || "offline").toUpperCase(), items.reduce((n, item) => n + (Number(item.quantity) || 1), 0),
+              items.map((item) => `${item.name || "Perfume"} (${sizeLabel(item)}) x ${Number(item.quantity) || 1}`).join(" | "),
+              itemDetails, Number(order.subtotal) || 0, Boolean(order.discountEnabled),
+              order.discountMode || "percent", Number(order.discountValue) || 0,
+              Number(order.discount) || 0, charges, Number(order.payable) || 0
+            ];
+          });
+          const csv = [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n");
+          downloadFile(`jannat-collection-orders-${fileDateStamp()}.csv`, "\uFEFF" + csv, "text/csv");
+          setBackupStatus(`Orders CSV downloaded with ${orders.length} order(s). CSV is for spreadsheets; use the JSON backup for full restoration.`);
+          notify("Orders CSV downloaded");
+        }
+
+        function downloadProductsCsv() {
+          const products = buildProductRows();
+          const headers = ["Product Name", "Unit Type", "Size", "Recorded Base Price (INR)", "Line Occurrences", "Recorded Quantity", "Additional Charge Names", "Found In"];
+          const rows = products.map((product) => [
+            product.name, product.unitType, product.size, product.recordedBasePrice,
+            product.lineOccurrences, product.recordedQuantity, product.additionalChargeNames, product.foundIn
+          ]);
+          const csv = [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n");
+          downloadFile(`jannat-collection-products-${fileDateStamp()}.csv`, "\uFEFF" + csv, "text/csv");
+          setBackupStatus(`Product list CSV downloaded with ${products.length} distinct recorded product variant(s). These are derived from saved orders and the current cart.`);
+          notify("Product list CSV downloaded");
+        }
+
+        function isValidBackupOrder(order) {
+          return order && typeof order === "object" &&
+            (typeof order.id === "string" || typeof order.orderNumber === "string") &&
+            Array.isArray(order.items) &&
+            Number.isFinite(Number(order.payable)) &&
+            Number.isFinite(Number(order.subtotal));
+        }
+
+        async function restoreFullBackup() {
+          const file = $("restoreBackupFile").files?.[0];
+          if (!file) {
+            setBackupStatus("Choose a JSON backup file first.", true);
+            notify("Select a JSON backup file");
+            return;
+          }
+          let backup;
+          try {
+            backup = JSON.parse(await file.text());
+          } catch (error) {
+            setBackupStatus("This file is not valid JSON. No data was changed.", true);
+            notify("Could not read backup file");
+            return;
+          }
+          if (!backup || backup.format !== BACKUP_FORMAT || !Array.isArray(backup.orders) ||
+              !backup.orders.every(isValidBackupOrder) ||
+              (backup.cart != null && !Array.isArray(backup.cart))) {
+            setBackupStatus("This does not look like a valid Jannat Collection backup. No data was changed.", true);
+            notify("Invalid backup file");
+            return;
+          }
+          const invalidCartItem = (backup.cart || []).some((item) =>
+            !item || !Number.isFinite(Number(item.subtotal)) ||
+            !Number.isFinite(Number(item.quantity)) || Number(item.quantity) <= 0
+          );
+          if (invalidCartItem) {
+            setBackupStatus("The backup contains invalid cart data. No data was changed.", true);
+            notify("Backup cart data is invalid");
+            return;
+          }
+          const mode = $("restoreMode").value;
+          const existingCount = orders.length;
+          const imported = backup.orders;
+          const nextOrders = mode === "replace"
+            ? imported.map((order) => ({ ...order }))
+            : (() => {
+                const merged = orders.map((order) => ({ ...order }));
+                const known = new Set(merged.map((order) => String(order.id || order.orderNumber)));
+                imported.forEach((order) => {
+                  const key = String(order.id || order.orderNumber);
+                  if (!known.has(key)) {
+                    merged.push({ ...order });
+                    known.add(key);
+                  }
+                });
+                return merged;
+              })();
+          const confirmation = mode === "replace"
+            ? `Replace ${existingCount} existing order(s) with ${imported.length} backup order(s)? This cannot be automatically undone. Download a current backup first if you may need it.`
+            : `Merge ${imported.length} backup order(s) with ${existingCount} existing order(s)? Duplicate IDs/order numbers will be skipped.`;
+          if (!window.confirm(confirmation)) return;
+
+          const oldOrders = orders;
+          const oldCart = cart.map((item) => ({ ...item }));
+          const oldPaymentMode = paymentMode;
+          orders = nextOrders;
+          const ordersSaved = safeWrite(ORDERS_STORAGE_KEY, orders);
+          if (!ordersSaved) {
+            orders = oldOrders;
+            setBackupStatus("Could not save restored orders to this browser's storage. Existing records were kept; download/export space may be needed.", true);
+            return;
+          }
+          if ($("restoreCartToo").checked) {
+            cart.splice(0, cart.length, ...(backup.cart || []).map((item) => ({ ...item, id: nextCartId++ })));
+            paymentMode = backup.paymentMode === "online" ? "online" : "offline";
+            persistCart();
+            try { localStorage.setItem(PAYMENT_MODE_KEY, paymentMode); } catch (error) {}
+            updatePaymentModeUI();
+          }
+          renderCart();
+          renderOrderHistory();
+          $("restoreBackupFile").value = "";
+          const added = mode === "replace" ? imported.length : nextOrders.length - existingCount;
+          setBackupStatus(`Restore complete. ${added} order(s) imported; ${orders.length} order(s) now available.${$("restoreCartToo").checked ? " Cart and payment mode restored where provided." : " Existing cart and payment mode left unchanged."}`);
+          notify("Backup restored successfully");
+        }
+
+                function saveCurrentOrder() {
+          if (!cart.length) {
+            notify("Add at least one item before saving an order");
+            return;
+          }
+          const totals = cartTotals();
+          const now = new Date();
+          const order = {
+            id: `${now.getTime()}-${Math.random().toString(36).slice(2, 8)}`,
+            orderNumber: `JC-${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}-${String(orders.length + 1).padStart(3, "0")}`,
+            createdAt: now.toISOString(),
+            items: cart.map((item) => ({ ...item })),
+            subtotal: totals.subtotal,
+            discountEnabled,
+            discountMode,
+            discountValue: num(discountInput),
+            discount: totals.discount,
+            paymentMode,
+            payable: totals.payable,
+          };
+          orders.unshift(order);
+          if (!safeWrite(ORDERS_STORAGE_KEY, orders)) {
+            orders.shift();
+            return;
+          }
+          cart.splice(0, cart.length);
+          persistCart();
+          renderCart();
+          renderOrderHistory();
+          notify(`Order saved · ${money(order.payable)}`);
+        }
+
+        function cartTotals() {
+          const subtotal = cart.reduce(
+              (sum, item) => sum + item.subtotal * item.quantity,
+              0,
+            ),
+            value = num(discountInput);
+          const discount = discountEnabled
+            ? Math.min(
+                subtotal,
+                discountMode === "percent"
+                  ? (subtotal * Math.min(value, 100)) / 100
+                  : value,
+              )
+            : 0;
+          return {
+            subtotal,
+            discount,
+            payable: Math.max(0, subtotal - discount),
+            count: cart.reduce((sum, item) => sum + item.quantity, 0),
+          };
+        }
+        function calculate() {
+          const item = calculateItem(),
+            totals = cartTotals();
+          const isPiece = item.unitType === "piece";
+          $("basePriceHint").textContent = isPiece
+            ? `${money(item.basePrice)} / piece`
+            : `${money(item.basePrice)} / 12 ml`;
+          $("priceInputHint").textContent = isPiece
+            ? "— price of one packaged unit"
+            : "— price of your 12 ml base";
+          $("perfumeCostHint").textContent = money(item.perfumeCost);
+          $("chargesHint").textContent = money(item.charges);
+          $("discountHint").textContent = `− ${money(totals.discount)}`;
+        }
+        function addCharge(name = "", amount = "") {
+          const row = document.createElement("div");
+          row.className = "charge-row";
+          const nameInput = document.createElement("input");
+          nameInput.type = "text";
+          nameInput.setAttribute("aria-label", "Charge name");
+          nameInput.placeholder = "e.g. Bottle / packaging";
+          nameInput.value = name;
+          const wrap = document.createElement("div");
+          wrap.className = "input-wrap";
+          const currency = document.createElement("span");
+          currency.className = "currency";
+          currency.textContent = "₹";
+          const amountInput = document.createElement("input");
+          amountInput.type = "number";
+          amountInput.min = "0";
+          amountInput.step = "0.01";
+          amountInput.inputMode = "decimal";
+          amountInput.className = "money-input charge-amount";
+          amountInput.setAttribute("aria-label", "Charge amount");
+          amountInput.placeholder = "0";
+          amountInput.value = amount;
+          wrap.append(currency, amountInput);
+          const remove = document.createElement("button");
+          remove.type = "button";
+          remove.className = "remove-charge";
+          remove.textContent = "×";
+          remove.title = "Remove charge";
+          remove.setAttribute("aria-label", "Remove charge");
+          remove.addEventListener("click", () => {
+            row.remove();
+            calculate();
+          });
+          row.append(nameInput, wrap, remove);
+          chargesList.append(row);
+          nameInput.addEventListener("input", calculate);
+          amountInput.addEventListener("input", calculate);
+          nameInput.focus();
+          calculate();
+        }
+        function notify(message) {
+          toast.textContent = message;
+          toast.classList.add("show");
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(() => toast.classList.remove("show"), 2300);
+        }
+        function renderCart() {
+          const container = $("cartItems"),
+            totals = cartTotals();
+          $("cartCount").textContent = totals.count;
+          $("cartSubtotal").textContent = money(totals.subtotal);
+          $("cartDiscount").textContent = `− ${money(totals.discount)}`;
+          $("cartPayable").textContent = money(totals.payable);
+          $("cartGrandTotal").textContent = money(totals.payable);
+          $("cartDiscountRow").style.display =
+            discountEnabled && totals.discount > 0 ? "flex" : "none";
+          $("clearCartBtn").disabled = cart.length === 0;
+          $("saveOrderBtn").disabled = cart.length === 0;
+          persistCart();
+          if (!cart.length) {
+            container.innerHTML =
+              '<div class="cart-empty"><div class="empty-icon">◇</div>Your cart is waiting for its first fragrance.<br>Add a calculated item to start your order.</div>';
+            calculate();
+            return;
+          }
+          container.innerHTML = "";
+          cart.forEach((item) => {
+            const row = document.createElement("div");
+            row.className = "cart-list";
+            const line = document.createElement("div");
+            line.className = "cart-item";
+            const details = document.createElement("div"),
+              title = document.createElement("div"),
+              meta = document.createElement("div");
+            title.className = "cart-item-title";
+            title.textContent = item.name
+              ? `${item.name} · ${sizeLabel(item)}`
+              : `Perfume · ${sizeLabel(item)}`;
+            meta.className = "cart-item-meta";
+            const chargeDescription = Array.isArray(item.chargeBreakdown) && item.chargeBreakdown.length
+              ? item.chargeBreakdown.map(charge => `${charge.name || "Additional charge"}: ${money(Number(charge.amount) || 0)}`).join(" · ")
+              : item.charges > 0 ? `Additional charges: ${money(item.charges)} each` : "No additional charges";
+            meta.textContent = `${sizeLabel(item)} · Base ${money(item.basePrice)} · Product ${money(item.perfumeCost)} · ${chargeDescription}`;
+            details.append(title, meta);
+            const right = document.createElement("div");
+            right.className = "cart-item-right";
+            const price = document.createElement("div");
+            price.className = "cart-item-price";
+            price.textContent = money(item.subtotal * item.quantity);
+            const controls = document.createElement("div");
+            controls.className = "cart-controls";
+            const minus = document.createElement("button");
+            minus.type = "button";
+            minus.className = "qty-btn";
+            minus.textContent = "−";
+            minus.setAttribute("aria-label", "Decrease quantity");
+            minus.addEventListener("click", () => {
+              item.quantity--;
+              if (item.quantity <= 0)
+                cart.splice(
+                  cart.findIndex((x) => x.id === item.id),
+                  1,
+                );
+              renderCart();
+            });
+            const qty = document.createElement("span");
+            qty.className = "qty-number";
+            qty.textContent = item.quantity;
+            const plus = document.createElement("button");
+            plus.type = "button";
+            plus.className = "qty-btn";
+            plus.textContent = "+";
+            plus.setAttribute("aria-label", "Increase quantity");
+            plus.addEventListener("click", () => {
+              item.quantity++;
+              renderCart();
+            });
+            const remove = document.createElement("button");
+            remove.type = "button";
+            remove.className = "remove-item";
+            remove.textContent = "×";
+            remove.title = "Remove item";
+            remove.setAttribute("aria-label", "Remove item");
+            remove.addEventListener("click", () => {
+              cart.splice(
+                cart.findIndex((x) => x.id === item.id),
+                1,
+              );
+              renderCart();
+              notify("Item removed from cart");
+            });
+            controls.append(minus, qty, plus, remove);
+            right.append(price, controls);
+            line.append(details, right);
+            row.append(line);
+            container.append(row);
+          });
+          calculate();
+        }
+        document.querySelectorAll('input[name="size"]').forEach((input) =>
+          input.addEventListener("change", () => {
+            customWrap.classList.toggle("show", selectedSize() === "custom");
+            calculate();
+          }),
+        );
+        [priceInput, customSize, discountInput].forEach((el) =>
+          el.addEventListener("input", () => {
+            calculate();
+            renderCart();
+          }),
+        );
+        $("addCharge").addEventListener("click", () => addCharge());
+        document.querySelectorAll("[data-quick-charge]").forEach((button) => {
+          button.addEventListener("click", () => {
+            const amount = Number(button.dataset.quickCharge);
+            addCharge("Bottle / packaging", String(amount));
+            notify(`₹${amount} charge added`);
+          });
+        });
+        chargesList.addEventListener("input", () => {
+          calculate();
+          renderCart();
+        });
+        $("discountEnabled").addEventListener("change", () => {
+          discountEnabled = $("discountEnabled").checked;
+          $("discountFields").classList.toggle("hidden", !discountEnabled);
+          $("discountHiddenNote").classList.toggle("show", !discountEnabled);
+          $("discountSwitchLabel").textContent = discountEnabled
+            ? "Shown"
+            : "Hidden";
+          calculate();
+          renderCart();
+        });
+        document.querySelectorAll("[data-mode]").forEach((button) =>
+          button.addEventListener("click", () => {
+            discountMode = button.dataset.mode;
+            document.querySelectorAll("[data-mode]").forEach((btn) => {
+              const active = btn === button;
+              btn.classList.toggle("active", active);
+              btn.setAttribute("aria-pressed", String(active));
+            });
+            discountPrefix.textContent = discountMode === "percent" ? "%" : "₹";
+            discountInput.max = discountMode === "percent" ? "100" : "";
+            discountInput.value = "0";
+            calculate();
+            renderCart();
+          }),
+        );
+        $("addToCartBtn").addEventListener("click", () => {
+          const item = calculateItem();
+          if (item.unitType !== "piece" && item.size <= 0) {
+            notify("Enter a valid perfume size");
+            return;
+          }
+          cart.push({ id: nextCartId++, ...item, quantity: 1 });
+          renderCart();
+          notify(`${sizeLabel(item)} added to cart`);
+          $("cartPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+        $("clearCartBtn").addEventListener("click", () => {
+          cart.length = 0;
+          renderCart();
+          notify("Cart cleared");
+        });
+        $("saveOrderBtn").addEventListener("click", saveCurrentOrder);
+
+        $("toggleBackupToolsBtn").addEventListener("click", () => {
+          $("backupTools").hidden = !$("backupTools").hidden;
+          if (!$("backupTools").hidden) $("backupTools").scrollIntoView({ behavior: "smooth", block: "nearest" });
+        });
+        $("downloadJsonBackupBtn").addEventListener("click", downloadFullBackup);
+        $("downloadOrdersCsvBtn").addEventListener("click", downloadOrdersCsv);
+        $("downloadProductsCsvBtn").addEventListener("click", downloadProductsCsv);
+        $("restoreJsonBackupBtn").addEventListener("click", restoreFullBackup);
+        $("exportHistoryPdfBtn").addEventListener("click", openExportTools);
+        $("cancelHistoryPdfBtn").addEventListener("click", () => { $("exportTools").hidden = true; });
+        $("generateHistoryPdfBtn").addEventListener("click", exportOrderHistoryPdf);
+        document.querySelectorAll("[data-export-range]").forEach(button => button.addEventListener("click", () => setExportRange(button.dataset.exportRange)));
+        [$("exportStartDate"), $("exportEndDate"), $("exportIncludeItems"), $("exportIncludeCharges"), $("exportIncludeOrderSummary")].forEach(control => control.addEventListener("change", updateExportPreview));
+        $("clearHistoryBtn").addEventListener("click", () => {
+          if (!orders.length) return;
+          if (
+            !window.confirm("Delete all saved order history from this browser?")
+          )
+            return;
+          orders = [];
+          safeWrite(ORDERS_STORAGE_KEY, orders);
+          renderOrderHistory();
+          notify("Order history cleared");
+        });
+        $("resetBtn").addEventListener("click", () => {
+          $("productName").value = "";
+          priceInput.value = "1200";
+          document.querySelector('input[name="size"][value="12"]').checked =
+            true;
+          customSize.value = "25";
+          customWrap.classList.remove("show");
+          chargesList.innerHTML = "";
+          discountEnabled = false;
+          $("discountEnabled").checked = false;
+          $("discountFields").classList.add("hidden");
+          $("discountHiddenNote").classList.add("show");
+          $("discountSwitchLabel").textContent = "Hidden";
+          discountMode = "percent";
+          document.querySelectorAll("[data-mode]").forEach((btn) => {
+            const active = btn.dataset.mode === "percent";
+            btn.classList.toggle("active", active);
+            btn.setAttribute("aria-pressed", String(active));
+          });
+          discountPrefix.textContent = "%";
+          discountInput.max = "100";
+          discountInput.value = "0";
+          calculate();
+          notify("Inputs reset");
+        });
+        updatePaymentModeUI();
+        calculate();
+        renderCart();
+        renderOrderHistory();
+      })();
+    </script>
+  </body>
+</html>
