@@ -1120,6 +1120,23 @@
       .backup-status.warning{color:#713d45;background:#f5e9e6}
       @media(max-width:650px){.backup-grid{grid-template-columns:1fr}.backup-tools{padding:16px}}
 
+
+      .jc-modal-backdrop{position:fixed;inset:0;background:rgba(36,37,31,.48);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:1000}
+      .jc-modal-backdrop[hidden]{display:none!important}
+      .jc-modal{width:min(100%,460px);background:var(--card);border:1px solid var(--line);box-shadow:0 24px 80px rgba(30,20,18,.24);animation:jcModalIn .18s ease-out}
+      @keyframes jcModalIn{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+      .jc-modal-top{height:5px;background:linear-gradient(90deg,var(--wine),var(--gold))}
+      .jc-modal-content{padding:24px}
+      .jc-modal-eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--wine);font-weight:700;margin-bottom:9px}
+      .jc-modal-title{font:600 25px "Playfair Display",serif;margin:0 0 10px;color:var(--ink)}
+      .jc-modal-message{font-size:13px;line-height:1.7;color:var(--muted);white-space:pre-line}
+      .jc-modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:24px;flex-wrap:wrap}
+      .jc-modal-actions .action{min-width:100px;padding:0 15px;color:var(--wine);border-color:var(--line);background:transparent}
+      .jc-modal-actions .action.primary{background:var(--wine);border-color:var(--wine);color:#fff8ed}
+      .jc-modal-actions .action.danger{background:#8b3038;border-color:#8b3038;color:#fff8ed}
+      body.jc-modal-open{overflow:hidden}
+      @media(max-width:480px){.jc-modal-content{padding:20px}.jc-modal-title{font-size:23px}.jc-modal-actions{display:grid;grid-template-columns:1fr 1fr}.jc-modal-actions .action{width:100%}}
+
       @media print {
         body {
           background: white;
@@ -1569,6 +1586,22 @@
         ><span>YOUR FRAGRANCE, BEAUTIFULLY PRICED</span>
       </footer>
     </div>
+
+    <div class="jc-modal-backdrop" id="jcModalBackdrop" hidden>
+      <section class="jc-modal" role="dialog" aria-modal="true" aria-labelledby="jcModalTitle" aria-describedby="jcModalMessage">
+        <div class="jc-modal-top"></div>
+        <div class="jc-modal-content">
+          <div class="jc-modal-eyebrow">Jannat Collection</div>
+          <h2 class="jc-modal-title" id="jcModalTitle">Please confirm</h2>
+          <div class="jc-modal-message" id="jcModalMessage"></div>
+          <div class="jc-modal-actions">
+            <button class="action" type="button" id="jcModalCancelBtn">Cancel</button>
+            <button class="action primary" type="button" id="jcModalConfirmBtn">Confirm</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script>
       (() => {
@@ -1580,6 +1613,64 @@
           discountInput = $("discountValue"),
           discountPrefix = $("discountPrefix");
         const toast = $("toast");
+
+        let jcModalResolver = null;
+        let jcModalPreviousFocus = null;
+        function closeJcModal(result) {
+          const backdrop = $("jcModalBackdrop");
+          if (backdrop.hidden) return;
+          backdrop.hidden = true;
+          document.body.classList.remove("jc-modal-open");
+          const resolver = jcModalResolver;
+          jcModalResolver = null;
+          if (jcModalPreviousFocus && typeof jcModalPreviousFocus.focus === "function") jcModalPreviousFocus.focus();
+          jcModalPreviousFocus = null;
+          if (resolver) resolver(Boolean(result));
+        }
+        function showJcConfirm({
+          title = "Please confirm",
+          message = "Are you sure you want to continue?",
+          confirmText = "Confirm",
+          cancelText = "Cancel",
+          danger = false,
+          eyebrow = "Jannat Collection"
+        } = {}) {
+          if (jcModalResolver) closeJcModal(false);
+          const backdrop = $("jcModalBackdrop");
+          $("jcModalTitle").textContent = title;
+          $("jcModalMessage").textContent = message;
+          $("jcModalConfirmBtn").textContent = confirmText;
+          $("jcModalCancelBtn").textContent = cancelText;
+          $("jcModalConfirmBtn").classList.toggle("danger", danger);
+          $("jcModalConfirmBtn").classList.toggle("primary", !danger);
+          backdrop.querySelector(".jc-modal-eyebrow").textContent = eyebrow;
+          jcModalPreviousFocus = document.activeElement;
+          backdrop.hidden = false;
+          document.body.classList.add("jc-modal-open");
+          $("jcModalCancelBtn").focus();
+          return new Promise((resolve) => { jcModalResolver = resolve; });
+        }
+        $("jcModalCancelBtn").addEventListener("click", () => closeJcModal(false));
+        $("jcModalConfirmBtn").addEventListener("click", () => closeJcModal(true));
+        $("jcModalBackdrop").addEventListener("click", (event) => {
+          if (event.target === $("jcModalBackdrop")) closeJcModal(false);
+        });
+        document.addEventListener("keydown", (event) => {
+          if ($("jcModalBackdrop").hidden) return;
+          if (event.key === "Escape") {
+            event.preventDefault();
+            closeJcModal(false);
+          } else if (event.key === "Tab") {
+            const controls = [$("jcModalCancelBtn"), $("jcModalConfirmBtn")];
+            const first = controls[0], last = controls[controls.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+              event.preventDefault(); last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+              event.preventDefault(); first.focus();
+            }
+          }
+        });
+
         let discountMode = "percent",
           discountEnabled = false,
           toastTimer;
@@ -2140,7 +2231,14 @@
           const confirmation = mode === "replace"
             ? `Replace ${existingCount} existing order(s) with ${imported.length} backup order(s)? This cannot be automatically undone. Download a current backup first if you may need it.`
             : `Merge ${imported.length} backup order(s) with ${existingCount} existing order(s)? Duplicate IDs/order numbers will be skipped.`;
-          if (!window.confirm(confirmation)) return;
+          const confirmed = await showJcConfirm({
+            title: mode === "replace" ? "Replace saved orders?" : "Merge backup orders?",
+            message: confirmation,
+            confirmText: mode === "replace" ? "Replace orders" : "Merge orders",
+            cancelText: "Cancel",
+            danger: mode === "replace"
+          });
+          if (!confirmed) return;
 
           const oldOrders = orders;
           const oldCart = cart.map((item) => ({ ...item }));
@@ -2453,12 +2551,16 @@
         $("generateHistoryPdfBtn").addEventListener("click", exportOrderHistoryPdf);
         document.querySelectorAll("[data-export-range]").forEach(button => button.addEventListener("click", () => setExportRange(button.dataset.exportRange)));
         [$("exportStartDate"), $("exportEndDate"), $("exportIncludeItems"), $("exportIncludeCharges"), $("exportIncludeOrderSummary")].forEach(control => control.addEventListener("change", updateExportPreview));
-        $("clearHistoryBtn").addEventListener("click", () => {
+        $("clearHistoryBtn").addEventListener("click", async () => {
           if (!orders.length) return;
-          if (
-            !window.confirm("Delete all saved order history from this browser?")
-          )
-            return;
+          const confirmed = await showJcConfirm({
+            title: "Clear order history?",
+            message: `This will delete all ${orders.length} saved order(s) from this browser. This action cannot be undone unless you have a backup.`,
+            confirmText: "Clear history",
+            cancelText: "Keep orders",
+            danger: true
+          });
+          if (!confirmed) return;
           orders = [];
           safeWrite(ORDERS_STORAGE_KEY, orders);
           renderOrderHistory();
