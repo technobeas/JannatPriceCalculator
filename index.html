@@ -1193,6 +1193,13 @@
           display: none;
         }
       }
+
+      /* Prevent iOS Safari from zooming when any form field receives focus. */
+      input,
+      select,
+      textarea {
+        font-size: 16px !important;
+      }
     </style>
   </head>
   <body>
@@ -1300,7 +1307,7 @@
                 >
                 <label class="size-option"
                   ><input type="radio" name="size" value="custom" /><span
-                    ><strong>Any ML</strong></span
+                    ><strong>Any</strong></span
                   ></label
                 >
               </div>
